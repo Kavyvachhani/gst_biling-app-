@@ -1,4 +1,3 @@
-// lib/models/invoice.dart
 import 'product.dart';
 
 class Invoice {
@@ -14,8 +13,7 @@ class Invoice {
   double get totalPrice =>
       products.fold(0.0, (sum, product) => sum + product.totalPrice);
 
-  // Convert the invoice to map for saving in database.
-  // For a simplified implementation, product IDs are stored as a comma-separated string.
+  // Convert invoice to Map (for storage)
   Map<String, dynamic> toMap() {
     return {
       'id': id,

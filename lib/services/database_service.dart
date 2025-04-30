@@ -1,4 +1,3 @@
-// lib/services/database_service.dart
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/product.dart';
@@ -21,7 +20,7 @@ class DatabaseService {
       path,
       version: 1,
       onCreate: (db, version) async {
-        // Create products table
+        // Create products table.
         await db.execute('''
           CREATE TABLE products(
             id INTEGER PRIMARY KEY,
@@ -30,7 +29,7 @@ class DatabaseService {
             gstRate REAL
           )
         ''');
-        // Create invoices table
+        // Create invoices table.
         await db.execute('''
           CREATE TABLE invoices(
             id INTEGER PRIMARY KEY,
@@ -42,32 +41,21 @@ class DatabaseService {
     );
   }
 
-  // Insert a product into the database.
   static Future<void> addProduct(Product product) async {
-    try {
-      final db = await database;
-      await db.insert(
-        'products',
-        product.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      print("Product saved: ${product.name}");
-    } catch (e) {
-      print("Error saving product: $e");
-      rethrow;
-    }
+    final db = await database;
+    await db.insert(
+      'products',
+      product.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
-  // Retrieve all products.
   static Future<List<Product>> getProducts() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('products');
-    return List.generate(maps.length, (i) {
-      return Product.fromMap(maps[i]);
-    });
+    return List.generate(maps.length, (i) => Product.fromMap(maps[i]));
   }
 
-  // Insert an invoice into the database.
   static Future<void> addInvoice(Invoice invoice) async {
     final db = await database;
     await db.insert(
@@ -77,7 +65,6 @@ class DatabaseService {
     );
   }
 
-  // Retrieve all invoices.
   static Future<List<Map<String, dynamic>>> getInvoices() async {
     final db = await database;
     return await db.query('invoices');

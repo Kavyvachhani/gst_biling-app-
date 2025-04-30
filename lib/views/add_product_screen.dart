@@ -1,13 +1,12 @@
-// lib/views/add_product_screen.dart
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/database_service.dart';
 
 class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({Key? key}) : super(key: key);
+  const AddProductScreen({super.key});
 
   @override
-  _AddProductScreenState createState() => _AddProductScreenState();
+  State<AddProductScreen> createState() => _AddProductScreenState();
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
@@ -16,14 +15,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
   double gstRate = 5.0;
 
   Future<void> saveProduct() async {
-    // Check if fields are not empty
     if (nameController.text.isEmpty || priceController.text.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Please fill all fields")));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
       return;
     }
-    // Create product object 
-    Product product = Product(
+
+    final product = Product(
       id: DateTime.now().millisecondsSinceEpoch,
       name: nameController.text,
       price: double.tryParse(priceController.text) ?? 0,
@@ -32,62 +31,74 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     try {
       await DatabaseService.addProduct(product);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Product Saved")));
-      // Optionally, print on console to confirm
-      print("Product saved successfully: ${product.toMap()}");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Product Saved")));
       Navigator.pop(context);
     } catch (e) {
-      // If any error occurs, show error message
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error saving product")));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Error saving product")));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Add Product"),
-      ),
+      appBar: AppBar(title: const Text('Add Product')),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(labelText: "Product Name"),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Product Name',
+                border: OutlineInputBorder(),
               ),
-              TextField(
-                controller: priceController,
-                keyboardType:
-                    TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(labelText: "Price"),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: priceController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
               ),
-              SizedBox(height: 16),
-              DropdownButtonFormField<double>(
-                value: gstRate,
-                decoration: InputDecoration(labelText: "GST Rate"),
-                items: [5.0, 12.0, 18.0, 28.0].map((rate) {
-                  return DropdownMenuItem<double>(
-                    value: rate,
-                    child: Text("$rate%"),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    gstRate = value ?? 5.0;
-                  });
-                },
+              decoration: const InputDecoration(
+                labelText: 'Price',
+                border: OutlineInputBorder(),
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
+            ),
+            const SizedBox(height: 20),
+            DropdownButtonFormField<double>(
+              value: gstRate,
+              decoration: const InputDecoration(
+                labelText: 'GST Rate',
+                border: OutlineInputBorder(),
+              ),
+              items:
+                  [5.0, 12.0, 18.0, 28.0]
+                      .map(
+                        (rate) => DropdownMenuItem<double>(
+                          value: rate,
+                          child: Text("$rate%"),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (value) {
+                setState(() {
+                  gstRate = value ?? 5.0;
+                });
+              },
+            ),
+            const SizedBox(height: 30),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
                 onPressed: saveProduct,
-                child: Text("Save Product"),
+                child: const Text('Save Product'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
