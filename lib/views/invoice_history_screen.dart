@@ -10,20 +10,13 @@ class InvoiceHistoryScreen extends StatefulWidget {
 
 class _InvoiceHistoryScreenState extends State<InvoiceHistoryScreen> {
   late Future<List<Map<String, dynamic>>> _invoicesFuture;
+
   // Define some static sample invoices.
+  // Static Invoice #1001: Uses sample product A and B -> Total = 236.0 + 560.0 = 796.0
+  // Static Invoice #1002: Uses sample product C -> Total = 315.0
   final List<Map<String, dynamic>> _sampleInvoices = [
-    {
-      'id': 1001,
-      'productIds': "201,202",
-      'totalAmount':
-          236.0 +
-          560.0, // calculated totals for Static Product A (236) and B (560)
-    },
-    {
-      'id': 1002,
-      'productIds': "203",
-      'totalAmount': 315.0, // for Static Product C: 300 + 7.5 + 7.5
-    },
+    {'id': 1001, 'productIds': "201,202", 'totalAmount': 796.0},
+    {'id': 1002, 'productIds': "203", 'totalAmount': 315.0},
   ];
 
   @override
@@ -46,7 +39,7 @@ class _InvoiceHistoryScreenState extends State<InvoiceHistoryScreen> {
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             invoices = snapshot.data!;
           } else {
-            // Use static sample invoices if database is empty.
+            // Use static sample invoices if no stored invoice is found.
             invoices = _sampleInvoices;
           }
           return ListView.builder(

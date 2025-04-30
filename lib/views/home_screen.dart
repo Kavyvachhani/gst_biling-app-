@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'billing_screen.dart';
 import 'add_product_screen.dart';
 import 'invoice_history_screen.dart';
+import 'AvailableProductsScreen.dart'; // Import the AvailableProductsScreen
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,20 @@ class HomeScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (_) => const InvoiceHistoryScreen(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              // New button to navigate to the Available Products screen.
+              ElevatedButton.icon(
+                icon: const Icon(Icons.store),
+                label: const Text("Available Products"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AvailableProductsScreen(),
                     ),
                   );
                 },
